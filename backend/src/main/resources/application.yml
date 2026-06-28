@@ -39,6 +39,12 @@ spring:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 20MB
+
   jackson:
     default-property-inclusion: non_null
     serialization:
