@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nybutik
+    username: nybutik
+    password: nybutik
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    check-template-location: false
+
+app:
+  cors:
+    allowed-origins: http://localhost:5173
+
+  storage:
+    endpoint: http://localhost:9000
+    bucket: ny-butik-images
+    access-key: minioadmin
+    secret-key: minioadmin
+    region: us-east-1
+    public-url: http://localhost:9000/ny-butik-images
+
+  payment:
+    provider: mock
+
+  shipment:
+    provider: mock
+
+management:
+  health:
+    mail:
+      enabled: false
+
+logging:
+  level:
+    com.nybutik: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    show-sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    root: WARN
+    com.nybutik: INFO
+    org.hibernate.SQL: WARN

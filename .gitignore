@@ -1,0 +1,22 @@
+# Backend
+backend/target/
+backend/.env
+backend/*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.production
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes (local data)
+docker/volumes/
