@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useForm, useFieldArray } from 'react-hook-form'
@@ -117,6 +118,7 @@ export default function ProductFormPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-4xl">
+      <Helmet><title>{isEdit ? 'Ürün Düzenle' : 'Yeni Ürün'} — NY Butik Admin</title></Helmet>
       {/* Başlık */}
       <div className="flex items-center gap-3">
         <Link to="/admin/urunler" className="p-2 text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100 rounded-lg transition-colors">

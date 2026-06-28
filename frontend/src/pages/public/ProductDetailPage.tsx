@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ShoppingBag, Heart, Share2, ChevronRight } from 'lucide-react'
@@ -49,6 +50,7 @@ export default function ProductDetailPage() {
 
   if (isLoading) return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Helmet><title>Yükleniyor... — NY Butik</title></Helmet>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="aspect-[3/4] bg-neutral-200 rounded-2xl animate-pulse" />
         <div className="flex flex-col gap-4 animate-pulse">
@@ -60,6 +62,7 @@ export default function ProductDetailPage() {
 
   if (isError || !product) return (
     <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+      <Helmet><title>Ürün Bulunamadı — NY Butik</title></Helmet>
       <p className="text-neutral-500">Ürün bulunamadı.</p>
       <Link to="/urunler" className="text-sm text-neutral-700 underline mt-2 inline-block">Ürünlere dön</Link>
     </div>
@@ -71,6 +74,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Helmet><title>{product.name} — NY Butik</title></Helmet>
       <nav className="flex items-center gap-1 text-xs text-neutral-500 mb-6">
         <Link to="/" className="hover:text-neutral-700">Ana Sayfa</Link>
         <ChevronRight className="w-3 h-3" />

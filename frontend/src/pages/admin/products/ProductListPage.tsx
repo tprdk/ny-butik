@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Plus, Search, Pencil, Trash2, Eye, ToggleLeft, ToggleRight, Loader2 } from 'lucide-react'
@@ -52,6 +53,7 @@ export default function AdminProductListPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <Helmet><title>Ürünler — NY Butik Admin</title></Helmet>
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-neutral-900">Ürünler</h1>
         <Link to="/admin/urunler/yeni" className="inline-flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors">

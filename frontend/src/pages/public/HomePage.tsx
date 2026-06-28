@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { useFeaturedProducts, useCategories } from '@/hooks/useProducts'
@@ -15,6 +16,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <Helmet><title>NY Butik — Tesettür Giyim</title></Helmet>
       {/* Hero */}
       <section className="relative bg-neutral-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-950" />
