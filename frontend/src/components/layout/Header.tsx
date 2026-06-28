@@ -3,7 +3,7 @@ import { ShoppingBag, Heart, User, Search, Menu } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 
 export default function Header() {
-  const { user, isAuthenticated } = useAuthStore()
+  const { isAuthenticated } = useAuthStore()
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
