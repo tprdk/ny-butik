@@ -8,22 +8,35 @@ import { formatPrice } from '@/lib/format'
 const STATUSES = ['DRAFT', 'ACTIVE', 'PASSIVE'] as const
 type Status = typeof STATUSES[number]
 
+const STATUS_LABELS: Record<Status | 'ALL', string> = {
+  ALL: 'Tümü',
+  ACTIVE: 'Aktif',
+  DRAFT: 'Taslak',
+  PASSIVE: 'Pasif',
+}
+
 export default function AdminProductListPage() {
   const navigate = useNavigate()
   const qc = useQueryClient()
   const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<Status>('ACTIVE')
+  const [status, setStatus] = useState<Status | 'ALL'>('ALL')
   const [page, setPage] = useState(0)
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-products', search, status, page],
-    queryFn: () => adminApi.getProducts({ search: search || undefined, status, page, size: 20 }),
+    queryFn: () => adminApi.getProducts({
+      search: search || undefined,
+      status: status === 'ALL' ? undefined : status,
+      page,
+      size: 20,
+    }),
   })
 
   const statusMutation = useMutation({
     mutationFn: ({ id, newStatus }: { id: number; newStatus: string }) =>
       adminApi.updateStatus(id, newStatus),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-products'] }),
+    onError: () => alert('Durum güncellenemedi. Lütfen tekrar deneyin.'),
   })
 
   const deleteMutation = useMutation({
@@ -59,10 +72,10 @@ export default function AdminProductListPage() {
           />
         </div>
         <div className="flex gap-1">
-          {STATUSES.map((s) => (
+          {(['ALL', ...STATUSES] as const).map((s) => (
             <button key={s} onClick={() => { setStatus(s); setPage(0) }}
               className={`px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${status === s ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-200 text-neutral-600 hover:border-neutral-400'}`}>
-              {s === 'ACTIVE' ? 'Aktif' : s === 'DRAFT' ? 'Taslak' : 'Pasif'}
+              {STATUS_LABELS[s]}
             </button>
           ))}
         </div>

@@ -25,7 +25,9 @@ public class ProductSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(cb.isNull(root.get("deletedAt")));
-            predicates.add(cb.equal(root.get("status"), status != null ? status : ProductStatus.ACTIVE));
+            if (status != null) {
+                predicates.add(cb.equal(root.get("status"), status));
+            }
 
             if (categoryId != null) {
                 predicates.add(cb.equal(root.get("category").get("id"), categoryId));

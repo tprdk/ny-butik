@@ -32,7 +32,7 @@ public class AdminProductController {
     public ResponseEntity<ApiResponse<PageResponse<ProductSummaryResponse>>> list(
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String search,
-            @RequestParam(defaultValue = "DRAFT") ProductStatus status,
+            @RequestParam(required = false) ProductStatus status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
 
