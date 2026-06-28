@@ -45,7 +45,6 @@ public class ProductImageService {
                 .build();
 
         product.getImages().add(image);
-        productService.findById(productId); // refresh
         return productMapper.toImageResponse(image);
     }
 

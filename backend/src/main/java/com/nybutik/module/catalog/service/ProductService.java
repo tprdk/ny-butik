@@ -114,6 +114,8 @@ public class ProductService {
         product.getTags().clear();
         product.getAttributes().clear();
         product.getVariants().clear();
+        // Hibernate'in DELETE'leri INSERT'lerden önce çalıştırması için flush zorunlu
+        productRepository.saveAndFlush(product);
 
         addTags(product, request.tags());
         addAttributes(product, request.attributes());
