@@ -40,8 +40,10 @@ const ProductFormPage = lazy(() => import('@/pages/admin/products/ProductFormPag
 const AdminOrderListPage = lazy(() => import('@/pages/admin/orders/OrderListPage'))
 const AdminOrderDetailPage = lazy(() => import('@/pages/admin/orders/OrderDetailPage'))
 const AdminReturnListPage = lazy(() => import('@/pages/admin/returns/ReturnListPage'))
+const AdminReturnDetailPage = lazy(() => import('@/pages/admin/returns/ReturnDetailPage'))
 const CouponPage = lazy(() => import('@/pages/admin/coupons/CouponPage'))
 const CustomerListPage = lazy(() => import('@/pages/admin/customers/CustomerListPage'))
+const CustomerDetailPage = lazy(() => import('@/pages/admin/customers/CustomerDetailPage'))
 const ReportsPage = lazy(() => import('@/pages/admin/reports/ReportsPage'))
 
 export default function App() {
@@ -91,8 +93,10 @@ export default function App() {
             <Route path="siparisler" element={<AdminOrderListPage />} />
             <Route path="siparisler/:id" element={<AdminOrderDetailPage />} />
             <Route path="iadeler" element={<AdminReturnListPage />} />
+            <Route path="iadeler/:id" element={<AdminReturnDetailPage />} />
             <Route path="kuponlar" element={<CouponPage />} />
             <Route path="musteriler" element={<CustomerListPage />} />
+            <Route path="musteriler/:id" element={<CustomerDetailPage />} />
             <Route path="raporlar" element={<ReportsPage />} />
           </Route>
         </Route>

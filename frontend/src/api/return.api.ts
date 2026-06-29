@@ -53,6 +53,13 @@ export interface ReturnDetail {
   updatedAt: string
 }
 
+export interface AdminUpdateReturnPayload {
+  status: ReturnStatus
+  adminNote?: string
+  returnTracking?: string
+  refundAmount?: number
+}
+
 export const returnApi = {
   getMyReturns: (page = 0, size = 10): Promise<PageResponse<ReturnSummary>> =>
     apiClient
@@ -64,4 +71,18 @@ export const returnApi = {
 
   create: (payload: CreateReturnPayload): Promise<ReturnDetail> =>
     apiClient.post<ApiResponse<ReturnDetail>>('/returns', payload).then(unwrap),
+
+  adminList: (status?: ReturnStatus, page = 0, size = 20): Promise<PageResponse<ReturnSummary>> => {
+    const params = new URLSearchParams({ page: String(page), size: String(size) })
+    if (status) params.set('status', status)
+    return apiClient
+      .get<ApiResponse<PageResponse<ReturnSummary>>>(`/admin/returns?${params}`)
+      .then(unwrap)
+  },
+
+  adminGet: (id: number): Promise<ReturnDetail> =>
+    apiClient.get<ApiResponse<ReturnDetail>>(`/admin/returns/${id}`).then(unwrap),
+
+  adminUpdate: (id: number, payload: AdminUpdateReturnPayload): Promise<ReturnDetail> =>
+    apiClient.patch<ApiResponse<ReturnDetail>>(`/admin/returns/${id}`, payload).then(unwrap),
 }
