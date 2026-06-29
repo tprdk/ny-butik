@@ -1,6 +1,7 @@
 package com.nybutik.config;
 
 import com.nybutik.shared.security.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -60,6 +61,18 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, resp, e) -> {
+                            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            resp.setContentType("application/json;charset=UTF-8");
+                            resp.getWriter().write("{\"status\":401,\"title\":\"Unauthorized\"}");
+                        })
+                        .accessDeniedHandler((req, resp, e) -> {
+                            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            resp.setContentType("application/json;charset=UTF-8");
+                            resp.getWriter().write("{\"status\":403,\"title\":\"Forbidden\"}");
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SWAGGER_PATHS).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_GET).permitAll()

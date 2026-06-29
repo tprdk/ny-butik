@@ -1,28 +1,17 @@
 package com.nybutik.integration.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nybutik.BaseIntegrationTest;
 import com.nybutik.module.user.dto.request.LoginRequest;
 import com.nybutik.module.user.dto.request.RegisterRequest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Testcontainers
-class AuthIntegrationTest {
-
-    @Autowired MockMvc mockMvc;
-    @Autowired ObjectMapper objectMapper;
+@DisplayName("Auth — Kimlik Doğrulama")
+class AuthIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void register_withValidData_returns201() throws Exception {

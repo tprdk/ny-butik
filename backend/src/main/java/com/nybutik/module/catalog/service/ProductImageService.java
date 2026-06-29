@@ -27,6 +27,7 @@ public class ProductImageService {
     private final StorageService storageService;
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final com.nybutik.module.catalog.repository.ProductImageRepository productImageRepository;
 
     @Transactional
     public ProductImageResponse upload(Long productId, MultipartFile file, String altText) {
@@ -45,7 +46,9 @@ public class ProductImageService {
                 .build();
 
         product.getImages().add(image);
-        return productMapper.toImageResponse(image);
+        // Direkt kaydet: IDENTITY stratejisinde cascade yerine doğrudan save ID'yi anında üretir
+        ProductImage saved = productImageRepository.save(image);
+        return productMapper.toImageResponse(saved);
     }
 
     @Transactional
