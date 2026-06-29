@@ -23,19 +23,30 @@ export function CartDrawer() {
     return () => document.removeEventListener('keydown', handler)
   }, [close])
 
-  // Drawer açıkken scroll kilitle — scrollbar genişliğini padding ile telafi et
+  // Drawer açıkken scroll kilitle — pozisyonu koru, scrollbar genişliğini telafi et
   useEffect(() => {
     if (isOpen) {
+      const scrollY = window.scrollY
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
       document.body.style.paddingRight = `${scrollbarWidth}px`
-      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = ''
+      const top = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
       document.body.style.paddingRight = ''
+      window.scrollTo(0, -parseInt(top || '0'))
     }
     return () => {
-      document.body.style.overflow = ''
+      const top = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
       document.body.style.paddingRight = ''
+      if (top) window.scrollTo(0, -parseInt(top))
     }
   }, [isOpen])
 
