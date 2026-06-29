@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import { useState, useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ShoppingBag, Heart, Share2, ChevronRight } from 'lucide-react'
+import { ShoppingBag, Heart, ChevronRight } from 'lucide-react'
 import { useProduct } from '@/hooks/useProducts'
 import { ImageGallery } from '@/components/catalog/ImageGallery'
 import { ColorSwatch } from '@/components/catalog/ColorSwatch'
@@ -53,22 +53,24 @@ export default function ProductDetailPage() {
   [product, selectedColorId, selectedSizeId])
 
   if (isLoading) return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="container-site py-10">
       <Helmet><title>Yükleniyor... — NY Butik</title></Helmet>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="aspect-[3/4] bg-neutral-200 rounded-2xl animate-pulse" />
-        <div className="flex flex-col gap-4 animate-pulse">
-          {Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-6 bg-neutral-200 rounded" />)}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
+        <div className="aspect-[3/4] bg-brand-sand animate-pulse" />
+        <div className="flex flex-col gap-5 animate-pulse pt-4">
+          {[60, 40, 24, 80, 32].map((w, i) => (
+            <div key={i} className={`h-5 bg-border rounded-sm`} style={{ width: `${w}%` }} />
+          ))}
         </div>
       </div>
     </div>
   )
 
   if (isError || !product) return (
-    <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+    <div className="container-site py-24 text-center">
       <Helmet><title>Ürün Bulunamadı — NY Butik</title></Helmet>
-      <p className="text-neutral-500">Ürün bulunamadı.</p>
-      <Link to="/urunler" className="text-sm text-neutral-700 underline mt-2 inline-block">Ürünlere dön</Link>
+      <p className="text-muted-foreground font-light mb-4">Ürün bulunamadı.</p>
+      <Link to="/urunler" className="text-sm text-foreground underline underline-offset-4">Ürünlere dön</Link>
     </div>
   )
 
@@ -77,7 +79,7 @@ export default function ProductDetailPage() {
     : product.variants[0]?.salePrice != null ? product.variants[0].price : undefined
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="container-site py-10">
       <Helmet>
         <title>{product.name} — NY Butik</title>
         <meta name="description" content={product.shortDesc ?? `${product.name} — NY Butik'te en iyi fiyatlarla tesettür giyim.`} />
@@ -90,102 +92,158 @@ export default function ProductDetailPage() {
         <meta name="twitter:title" content={product.name} />
         {product.images[0] && <meta name="twitter:image" content={product.images[0].url} />}
       </Helmet>
-      <nav className="flex items-center gap-1 text-xs text-neutral-500 mb-6">
-        <Link to="/" className="hover:text-neutral-700">Ana Sayfa</Link>
+
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1.5 text-[11px] tracking-wide text-muted-foreground mb-8">
+        <Link to="/" className="hover:text-foreground transition-colors">Ana Sayfa</Link>
         <ChevronRight className="w-3 h-3" />
-        <Link to="/urunler" className="hover:text-neutral-700">Ürünler</Link>
+        <Link to="/urunler" className="hover:text-foreground transition-colors">Ürünler</Link>
         <ChevronRight className="w-3 h-3" />
-        <span className="text-neutral-700 truncate max-w-[200px]">{product.name}</span>
+        <span className="text-foreground truncate max-w-[200px]">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
         <ImageGallery images={product.images} productName={product.name} />
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
+          {/* Başlık & fiyat */}
           <div>
-            <p className="text-sm text-neutral-500 mb-1">{product.category.name}</p>
-            <h1 className="text-2xl font-bold text-neutral-900">{product.name}</h1>
+            <p className="text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-2">
+              {product.category.name}
+            </p>
+            <h1 className="font-serif text-3xl sm:text-4xl font-light text-foreground leading-tight mb-4">
+              {product.name}
+            </h1>
+            <div className="flex items-baseline gap-3">
+              <span className="text-2xl font-light text-foreground">
+                {displayPrice != null ? formatPrice(displayPrice) : '—'}
+              </span>
+              {displayOriginal && (
+                <span className="text-base text-muted-foreground line-through font-light">
+                  {formatPrice(displayOriginal)}
+                </span>
+              )}
+              {displayOriginal && displayPrice && (
+                <span className="text-xs text-brand-earth font-medium">
+                  {Math.round((1 - displayPrice / displayOriginal) * 100)}% indirim
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-2xl font-bold text-neutral-900">
-              {displayPrice != null ? formatPrice(displayPrice) : '—'}
-            </span>
-            {displayOriginal && <span className="text-lg text-neutral-400 line-through">{formatPrice(displayOriginal)}</span>}
-          </div>
+          {product.shortDesc && (
+            <p className="text-sm text-muted-foreground leading-relaxed font-light border-t border-border pt-5">
+              {product.shortDesc}
+            </p>
+          )}
 
-          {product.shortDesc && <p className="text-sm text-neutral-600 leading-relaxed">{product.shortDesc}</p>}
-
+          {/* Renk */}
           {colors.length > 0 && (
             <div>
-              <p className="text-sm font-medium text-neutral-700 mb-2">
-                Renk{selectedColorId && ': ' + colors.find((c) => c.id === selectedColorId)?.name}
+              <p className="text-xs tracking-widest uppercase text-muted-foreground mb-3">
+                Renk{selectedColorId ? ` — ${colors.find((c) => c.id === selectedColorId)?.name}` : ''}
               </p>
               <div className="flex gap-2 flex-wrap">
                 {colors.map((color) => (
-                  <ColorSwatch key={color.id} color={color} selected={selectedColorId === color.id}
-                    onClick={() => { setSelectedColorId(color.id === selectedColorId ? undefined : color.id); setSelectedSizeId(undefined) }} />
+                  <ColorSwatch
+                    key={color.id}
+                    color={color}
+                    selected={selectedColorId === color.id}
+                    onClick={() => {
+                      setSelectedColorId(color.id === selectedColorId ? undefined : color.id)
+                      setSelectedSizeId(undefined)
+                    }}
+                  />
                 ))}
               </div>
             </div>
           )}
 
+          {/* Beden */}
           {sizes.length > 0 && (
             <div>
-              <p className="text-sm font-medium text-neutral-700 mb-2">Beden</p>
-              <SizeSelector sizes={sizes} selectedId={selectedSizeId} disabledIds={outOfStockSizeIds}
-                onSelect={(s) => setSelectedSizeId(s.id === selectedSizeId ? undefined : s.id)} />
+              <p className="text-xs tracking-widest uppercase text-muted-foreground mb-3">Beden</p>
+              <SizeSelector
+                sizes={sizes}
+                selectedId={selectedSizeId}
+                disabledIds={outOfStockSizeIds}
+                onSelect={(s) => setSelectedSizeId(s.id === selectedSizeId ? undefined : s.id)}
+              />
             </div>
           )}
 
-          <div className="flex gap-3 mt-2">
+          {/* Stok bilgisi */}
+          {selectedVariant && (
+            <p className={`text-xs tracking-wide ${selectedVariant.inStock ? 'text-green-700' : 'text-destructive'}`}>
+              {selectedVariant.inStock
+                ? `${selectedVariant.stockQuantity} adet stokta`
+                : 'Stokta bulunmuyor'}
+            </p>
+          )}
+
+          {/* CTA butonları */}
+          <div className="flex gap-3 pt-2">
             <button
               disabled={!selectedVariant || !selectedVariant.inStock || addItem.isPending}
               onClick={() => {
                 if (!selectedVariant) return
-                addItem.mutate({ variantId: selectedVariant.id, quantity: 1 }, {
-                  onSuccess: openCart,
-                })
+                addItem.mutate({ variantId: selectedVariant.id, quantity: 1 }, { onSuccess: openCart })
               }}
-              className="flex-1 flex items-center justify-center gap-2 bg-neutral-900 text-white py-3.5 px-6 rounded-xl font-medium hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-              <ShoppingBag className="w-5 h-5" />
-              {addItem.isPending ? 'Ekleniyor...' : !selectedSizeId ? 'Beden Seçin' : !selectedVariant?.inStock ? 'Tükendi' : 'Sepete Ekle'}
+              className="flex-1 flex items-center justify-center gap-2.5 bg-foreground text-background py-4 px-6 text-sm font-medium tracking-wide hover:bg-stone-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ShoppingBag className="w-4 h-4" strokeWidth={1.5} />
+              {addItem.isPending
+                ? 'Ekleniyor...'
+                : !selectedSizeId
+                ? 'Beden Seçin'
+                : !selectedVariant?.inStock
+                ? 'Tükendi'
+                : 'Sepete Ekle'}
             </button>
-            <button className="p-3.5 border border-neutral-200 rounded-xl hover:bg-neutral-50"><Heart className="w-5 h-5" /></button>
-            <button className="p-3.5 border border-neutral-200 rounded-xl hover:bg-neutral-50"><Share2 className="w-5 h-5" /></button>
+            <button
+              className="p-4 border border-border hover:bg-accent transition-colors"
+              aria-label="Favorilere ekle"
+            >
+              <Heart className="w-4 h-4" strokeWidth={1.5} />
+            </button>
           </div>
 
-          {selectedVariant && (
-            <p className={`text-sm ${selectedVariant.inStock ? 'text-green-600' : 'text-red-500'}`}>
-              {selectedVariant.inStock ? `Stokta ${selectedVariant.stockQuantity} adet` : 'Stokta yok'}
-            </p>
-          )}
-
+          {/* Açıklama */}
           {product.description && (
-            <div className="border-t border-neutral-100 pt-5">
-              <h2 className="text-sm font-semibold text-neutral-700 mb-2">Ürün Açıklaması</h2>
-              <p className="text-sm text-neutral-600 leading-relaxed whitespace-pre-line">{product.description}</p>
+            <div className="border-t border-border pt-6 mt-2">
+              <h2 className="text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-3">
+                Ürün Açıklaması
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed font-light whitespace-pre-line">
+                {product.description}
+              </p>
             </div>
           )}
 
+          {/* Özellikler */}
           {product.attributes.length > 0 && (
-            <div className="border-t border-neutral-100 pt-5">
-              <h2 className="text-sm font-semibold text-neutral-700 mb-2">Ürün Özellikleri</h2>
-              <dl className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm">
+            <div className="border-t border-border pt-6">
+              <h2 className="text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-3">
+                Ürün Özellikleri
+              </h2>
+              <dl className="grid grid-cols-2 gap-y-3 gap-x-6 text-sm">
                 {product.attributes.map((attr) => (
                   <div key={attr.attrKey}>
-                    <dt className="text-neutral-500">{attr.attrKey}</dt>
-                    <dd className="font-medium text-neutral-800">{attr.attrValue}</dd>
+                    <dt className="text-xs text-muted-foreground mb-0.5">{attr.attrKey}</dt>
+                    <dd className="font-light text-foreground">{attr.attrValue}</dd>
                   </div>
                 ))}
               </dl>
             </div>
           )}
 
+          {/* Etiketler */}
           {product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
               {product.tags.map((tag) => (
-                <span key={tag} className="text-xs bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-full">{tag}</span>
+                <span key={tag} className="text-[10px] tracking-wide uppercase bg-accent text-muted-foreground px-3 py-1">
+                  {tag}
+                </span>
               ))}
             </div>
           )}

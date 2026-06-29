@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { customerApi } from '@/api/customer.api'
 import { formatDate } from '@/lib/format'
 
@@ -29,58 +30,39 @@ export default function CustomerListPage() {
     <>
       <Helmet><title>Müşteriler — NY Butik Admin</title></Helmet>
 
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-gray-900">Müşteriler</h1>
+      <div className="space-y-5">
+        <h1 className="font-serif text-2xl font-light text-foreground">Müşteriler</h1>
 
         {isLoading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="h-14 animate-pulse rounded-lg bg-gray-100" />
-            ))}
-          </div>
+          <div className="space-y-2">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-12 animate-pulse bg-accent border border-border" />)}</div>
         ) : (
-          <div className="overflow-x-auto rounded-lg border bg-white">
+          <div className="border border-border overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="border-b bg-gray-50">
-                <tr className="text-left text-gray-500">
-                  <th className="px-4 py-3">Ad Soyad</th>
-                  <th className="px-4 py-3">E-posta</th>
-                  <th className="px-4 py-3">Üyelik Tarihi</th>
-                  <th className="px-4 py-3">Durum</th>
-                  <th className="px-4 py-3" />
+              <thead>
+                <tr className="border-b border-border bg-accent/50">
+                  {['Ad Soyad', 'E-posta', 'Üyelik Tarihi', 'Durum', ''].map((h, i) => (
+                    <th key={i} className="px-4 py-3 text-left text-[10px] tracking-[0.12em] uppercase text-muted-foreground font-medium">{h}</th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y divide-border">
                 {data?.content.map((c) => (
-                  <tr key={c.id} className="text-gray-700 hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium">
-                      {c.firstName} {c.lastName}
-                    </td>
-                    <td className="px-4 py-3 text-gray-500">{c.email}</td>
-                    <td className="px-4 py-3 text-gray-400">{formatDate(c.createdAt)}</td>
+                  <tr key={c.id} className="hover:bg-accent/50 transition-colors">
+                    <td className="px-4 py-3 text-sm font-light text-foreground">{c.firstName} {c.lastName}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{c.email}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{formatDate(c.createdAt)}</td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          c.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-red-100 text-red-600'
-                        }`}
-                      >
+                      <span className={`border text-[10px] tracking-wide px-2 py-0.5 ${c.isActive ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
                         {c.isActive ? 'Aktif' : 'Pasif'}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => navigate(`/admin/musteriler/${c.id}`)}
-                          className="text-xs font-medium text-blue-600 hover:underline"
-                        >
-                          Detay
-                        </button>
+                        <button onClick={() => navigate(`/admin/musteriler/${c.id}`)} className="text-xs text-brand-earth hover:underline underline-offset-2">Detay</button>
                         <button
                           onClick={() => toggleMutation.mutate(c.id)}
                           disabled={toggleMutation.isPending}
-                          className="text-xs font-medium text-gray-500 hover:underline disabled:opacity-40"
+                          className="text-xs text-muted-foreground hover:text-foreground hover:underline underline-offset-2 disabled:opacity-40 transition-colors"
                         >
                           {c.isActive ? 'Pasife Al' : 'Aktif Et'}
                         </button>
@@ -89,11 +71,7 @@ export default function CustomerListPage() {
                   </tr>
                 ))}
                 {data?.content.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
-                      Müşteri bulunamadı.
-                    </td>
-                  </tr>
+                  <tr><td colSpan={5} className="px-4 py-10 text-center text-sm font-light text-muted-foreground">Müşteri bulunamadı.</td></tr>
                 )}
               </tbody>
             </table>
@@ -102,23 +80,14 @@ export default function CustomerListPage() {
 
         {data && data.totalPages > 1 && (
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-500">
-              {data.totalElements} müşteri, sayfa {data.page + 1} / {data.totalPages}
-            </p>
-            <div className="flex gap-2">
-              <button
-                disabled={page === 0}
-                onClick={() => setPage((p) => p - 1)}
-                className="rounded border px-3 py-1.5 text-sm disabled:opacity-40"
-              >
-                Önceki
+            <p className="text-xs text-muted-foreground">{data.totalElements} müşteri</p>
+            <div className="flex items-center gap-3">
+              <button disabled={page === 0} onClick={() => setPage((p) => p - 1)} className="p-2 border border-border hover:bg-accent transition-colors disabled:opacity-30">
+                <ChevronLeft size={14} strokeWidth={1.5} />
               </button>
-              <button
-                disabled={page >= data.totalPages - 1}
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded border px-3 py-1.5 text-sm disabled:opacity-40"
-              >
-                Sonraki
+              <span className="text-xs text-muted-foreground">{data.page + 1} / {data.totalPages}</span>
+              <button disabled={page >= data.totalPages - 1} onClick={() => setPage((p) => p + 1)} className="p-2 border border-border hover:bg-accent transition-colors disabled:opacity-30">
+                <ChevronRight size={14} strokeWidth={1.5} />
               </button>
             </div>
           </div>

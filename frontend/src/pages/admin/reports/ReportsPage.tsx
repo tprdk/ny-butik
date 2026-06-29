@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
 import { dashboardApi } from '@/api/dashboard.api'
 import { formatPrice } from '@/lib/format'
 
@@ -24,12 +25,8 @@ export default function ReportsPage() {
   })
 
   const handleExport = async () => {
-    try {
-      await dashboardApi.exportCsv(from, to)
-      toast.success('CSV indirildi')
-    } catch {
-      toast.error('CSV indirme başarısız')
-    }
+    try { await dashboardApi.exportCsv(from, to); toast.success('CSV indirildi') }
+    catch { toast.error('CSV indirme başarısız') }
   }
 
   return (
@@ -37,85 +34,64 @@ export default function ReportsPage() {
       <Helmet><title>Raporlar — NY Butik Admin</title></Helmet>
 
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">Satış Raporları</h1>
+        <h1 className="font-serif text-2xl font-light text-foreground">Satış Raporları</h1>
 
-        <div className="flex flex-wrap items-end gap-4 rounded-lg border bg-white p-4">
-          <div>
-            <label className="mb-1 block text-sm text-gray-600">Başlangıç</label>
-            <input
-              type="date"
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
-              className="rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm text-gray-600">Bitiş</label>
-            <input
-              type="date"
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
-              className="rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
-            />
-          </div>
-          <button
-            onClick={() => setFetch(true)}
-            disabled={isLoading || isFetching}
-            className="rounded-lg bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
-          >
+        <div className="flex flex-wrap items-end gap-4 border border-border bg-accent/40 p-5">
+          {[
+            { label: 'Başlangıç', value: from, onChange: setFrom },
+            { label: 'Bitiş', value: to, onChange: setTo },
+          ].map(({ label, value, onChange }) => (
+            <div key={label}>
+              <label className="input-label mb-1">{label}</label>
+              <input type="date" value={value} onChange={(e) => onChange(e.target.value)} className="input w-auto" />
+            </div>
+          ))}
+          <button onClick={() => setFetch(true)} disabled={isLoading || isFetching} className="btn-primary gap-2">
+            {isFetching && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {isFetching ? 'Yükleniyor...' : 'Rapor Getir'}
           </button>
           {data && (
-            <button
-              onClick={handleExport}
-              className="rounded-lg border px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              CSV İndir
-            </button>
+            <button onClick={handleExport} className="btn-outline">CSV İndir</button>
           )}
         </div>
 
         {data && (
           <>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-lg border bg-white p-4">
-                <p className="text-sm text-gray-500">Toplam Sipariş</p>
-                <p className="mt-1 text-3xl font-bold">{data.totalOrders.toLocaleString('tr-TR')}</p>
+              <div className="border border-border p-5">
+                <p className="text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-2">Toplam Sipariş</p>
+                <p className="text-3xl font-light text-foreground">{data.totalOrders.toLocaleString('tr-TR')}</p>
               </div>
-              <div className="rounded-lg border bg-white p-4">
-                <p className="text-sm text-gray-500">Toplam Gelir</p>
-                <p className="mt-1 text-3xl font-bold text-green-700">{formatPrice(data.totalRevenue)}</p>
+              <div className="border border-border p-5">
+                <p className="text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-2">Toplam Gelir</p>
+                <p className="text-3xl font-light text-green-700">{formatPrice(data.totalRevenue)}</p>
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border bg-white">
+            <div className="border border-border overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="border-b bg-gray-50">
-                  <tr className="text-left text-gray-500">
-                    <th className="px-4 py-3">Tarih</th>
-                    <th className="px-4 py-3 text-right">Sipariş Sayısı</th>
-                    <th className="px-4 py-3 text-right">Gelir</th>
+                <thead>
+                  <tr className="border-b border-border bg-accent/50">
+                    {['Tarih', 'Sipariş Sayısı', 'Gelir'].map((h, i) => (
+                      <th key={i} className={`px-4 py-3 text-[10px] tracking-[0.12em] uppercase text-muted-foreground font-medium ${i > 0 ? 'text-right' : 'text-left'}`}>{h}</th>
+                    ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y divide-border">
                   {data.rows.map((row) => (
-                    <tr key={row.date} className="text-gray-700 hover:bg-gray-50">
-                      <td className="px-4 py-3">{row.date}</td>
-                      <td className="px-4 py-3 text-right">{row.orderCount}</td>
-                      <td className="px-4 py-3 text-right font-medium">{formatPrice(row.revenue)}</td>
+                    <tr key={row.date} className="hover:bg-accent/50 transition-colors">
+                      <td className="px-4 py-3 text-sm font-light text-foreground">{row.date}</td>
+                      <td className="px-4 py-3 text-right text-sm font-light text-foreground">{row.orderCount}</td>
+                      <td className="px-4 py-3 text-right text-sm font-light text-foreground">{formatPrice(row.revenue)}</td>
                     </tr>
                   ))}
                   {data.rows.length === 0 && (
-                    <tr>
-                      <td colSpan={3} className="px-4 py-8 text-center text-gray-400">
-                        Seçilen tarih aralığında sipariş bulunamadı.
-                      </td>
-                    </tr>
+                    <tr><td colSpan={3} className="px-4 py-10 text-center text-sm font-light text-muted-foreground">Seçilen tarih aralığında sipariş bulunamadı.</td></tr>
                   )}
                 </tbody>
                 {data.rows.length > 0 && (
-                  <tfoot className="border-t bg-gray-50">
-                    <tr className="font-semibold text-gray-900">
+                  <tfoot className="border-t border-border bg-accent/50">
+                    <tr className="font-medium text-foreground">
                       <td className="px-4 py-3">Toplam</td>
                       <td className="px-4 py-3 text-right">{data.totalOrders}</td>
                       <td className="px-4 py-3 text-right">{formatPrice(data.totalRevenue)}</td>

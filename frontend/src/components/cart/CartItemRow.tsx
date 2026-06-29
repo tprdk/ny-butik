@@ -19,56 +19,50 @@ export function CartItemRow({ item, onUpdate, onRemove, isUpdating }: Props) {
         <img
           src={item.imageUrl ?? '/placeholder-product.png'}
           alt={item.productName}
-          className="h-20 w-16 rounded-md object-cover bg-gray-100"
+          className="h-20 w-16 object-cover bg-brand-sand"
         />
       </Link>
 
       <div className="flex flex-1 flex-col gap-1 min-w-0">
         <Link
           to={`/urunler/${item.productSlug}`}
-          className="text-sm font-medium text-gray-900 hover:text-rose-600 line-clamp-2 leading-snug"
+          className="text-sm font-light text-foreground hover:text-brand-earth line-clamp-2 leading-snug transition-colors"
         >
           {item.productName}
         </Link>
 
-        {variantLabel && (
-          <p className="text-xs text-gray-500">{variantLabel}</p>
-        )}
-
-        <p className="text-xs text-gray-400">SKU: {item.sku}</p>
+        {variantLabel && <p className="text-xs text-muted-foreground">{variantLabel}</p>}
 
         <div className="mt-auto flex items-center justify-between">
-          <div className="flex items-center gap-1 rounded-md border border-gray-200">
+          <div className="flex items-center border border-border">
             <button
               onClick={() => onUpdate(item.variantId, item.quantity - 1)}
               disabled={item.quantity <= 1 || isUpdating}
-              className="p-1.5 text-gray-600 hover:text-rose-600 disabled:opacity-40 transition-colors"
+              className="p-1.5 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
               aria-label="Azalt"
             >
-              <Minus size={14} />
+              <Minus size={12} strokeWidth={1.5} />
             </button>
-            <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+            <span className="w-7 text-center text-xs font-light">{item.quantity}</span>
             <button
               onClick={() => onUpdate(item.variantId, item.quantity + 1)}
               disabled={isUpdating}
-              className="p-1.5 text-gray-600 hover:text-rose-600 disabled:opacity-40 transition-colors"
+              className="p-1.5 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
               aria-label="Artır"
             >
-              <Plus size={14} />
+              <Plus size={12} strokeWidth={1.5} />
             </button>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-gray-900">
-              {formatPrice(item.lineTotal)}
-            </span>
+            <span className="text-sm font-light text-foreground">{formatPrice(item.lineTotal)}</span>
             <button
               onClick={() => onRemove(item.variantId)}
               disabled={isUpdating}
-              className="text-gray-400 hover:text-red-500 transition-colors disabled:opacity-40"
+              className="text-muted-foreground hover:text-destructive transition-colors disabled:opacity-30"
               aria-label="Kaldır"
             >
-              <Trash2 size={16} />
+              <Trash2 size={14} strokeWidth={1.5} />
             </button>
           </div>
         </div>

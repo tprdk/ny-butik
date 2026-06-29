@@ -15,20 +15,15 @@ export function CartDrawer() {
   const { cart, isLoading, updateItem, removeItem, applyCoupon, removeCoupon } = useCart()
   const [couponError, setCouponError] = useState<string | null>(null)
 
-  // ESC ile kapat
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
   }, [close])
 
-  // Scroll kilitle
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    if (isOpen) document.body.style.overflow = 'hidden'
+    else document.body.style.overflow = ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
@@ -42,11 +37,7 @@ export function CartDrawer() {
     }
   }
 
-  const handleCheckout = () => {
-    close()
-    navigate('/odeme')
-  }
-
+  const handleCheckout = () => { close(); navigate('/odeme') }
   const isEmpty = !cart || cart.items.length === 0
 
   if (!isOpen) return null
@@ -55,24 +46,24 @@ export function CartDrawer() {
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/50"
+        className="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm"
         style={{ zIndex: 9998 }}
         onClick={close}
       />
 
-      {/* Drawer panel */}
+      {/* Drawer */}
       <div
-        className="fixed right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl"
-        style={{ zIndex: 9999 }}
+        className="fixed right-0 top-0 flex h-full w-full max-w-[420px] flex-col bg-background"
+        style={{ zIndex: 9999, boxShadow: '-20px 0 60px rgba(28,22,18,0.15)' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-6 py-4">
-          <div className="flex items-center gap-2">
-            <ShoppingBag size={20} className="text-rose-600" />
-            <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between border-b border-border px-6 py-5">
+          <div className="flex items-center gap-2.5">
+            <ShoppingBag size={16} strokeWidth={1.5} className="text-foreground/50" />
+            <h2 className="text-sm font-medium tracking-wide text-foreground">
               Sepetim
               {cart && cart.items.length > 0 && (
-                <span className="ml-2 text-sm font-normal text-gray-500">
+                <span className="ml-2 text-xs font-light text-muted-foreground">
                   ({cart.items.reduce((s, i) => s + i.quantity, 0)} ürün)
                 </span>
               )}
@@ -80,32 +71,35 @@ export function CartDrawer() {
           </div>
           <button
             onClick={close}
-            className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Sepeti kapat"
           >
-            <X size={20} />
+            <X size={16} strokeWidth={1.5} />
           </button>
         </div>
 
         {/* İçerik */}
-        <div className="flex-1 overflow-y-auto px-6">
+        <div className="flex-1 overflow-y-auto">
           {isLoading ? (
             <div className="flex h-40 items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-rose-600 border-t-transparent" />
+              <div className="h-5 w-5 animate-spin rounded-full border border-foreground/20 border-t-foreground/70" />
             </div>
           ) : isEmpty ? (
-            <div className="flex h-full flex-col items-center justify-center gap-4 py-16 text-center">
-              <ShoppingBag size={48} className="text-gray-200" />
-              <p className="text-gray-500">Sepetiniz boş</p>
+            <div className="flex h-full flex-col items-center justify-center gap-5 px-6 py-16 text-center">
+              <ShoppingBag size={40} strokeWidth={1} className="text-border" />
+              <div>
+                <p className="text-sm font-light text-foreground mb-1">Sepetiniz boş</p>
+                <p className="text-xs text-muted-foreground">Beğendiğiniz ürünleri sepete ekleyin.</p>
+              </div>
               <button
                 onClick={() => { close(); navigate('/urunler') }}
-                className="rounded-lg bg-rose-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 transition-colors"
+                className="btn-primary btn-sm"
               >
                 Alışverişe Başla
               </button>
             </div>
           ) : (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-border px-6">
               {cart.items.map((item) => (
                 <CartItemRow
                   key={item.variantId}
@@ -121,7 +115,7 @@ export function CartDrawer() {
 
         {/* Footer */}
         {!isEmpty && cart && (
-          <div className="border-t bg-gray-50 px-6 py-4">
+          <div className="border-t border-border bg-accent/40 px-6 py-5">
             <CartSummary
               cart={cart}
               onApplyCoupon={handleApplyCoupon}

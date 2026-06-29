@@ -14,14 +14,16 @@ const navItems = [
 
 export default function AdminLayout() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="hidden w-60 flex-shrink-0 border-r border-border bg-background md:flex flex-col">
-        <div className="flex h-16 items-center border-b border-border px-6">
-          <span className="font-serif text-xl font-semibold">NY Butik</span>
-          <span className="ml-2 rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">ADMİN</span>
+      <aside className="hidden w-56 flex-shrink-0 border-r border-border md:flex flex-col bg-background">
+        <div className="flex h-14 items-center border-b border-border px-5 gap-2.5">
+          <span className="font-serif text-lg font-light tracking-wide">NY Butik</span>
+          <span className="bg-foreground text-background px-1.5 py-0.5 text-[9px] font-medium tracking-widest uppercase">
+            Admin
+          </span>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 py-4 px-3 space-y-px">
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
@@ -29,14 +31,14 @@ export default function AdminLayout() {
               end={end}
               className={({ isActive }) =>
                 cn(
-                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'flex items-center gap-3 px-3 py-2.5 text-sm transition-colors',
                   isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    ? 'bg-foreground text-background font-medium'
+                    : 'text-muted-foreground hover:bg-accent hover:text-foreground font-light'
                 )
               }
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />
               {label}
             </NavLink>
           ))}
@@ -44,11 +46,11 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main */}
-      <div className="flex flex-1 flex-col">
-        <header className="flex h-16 items-center border-b border-border px-6">
-          <h1 className="text-lg font-semibold">Yönetim Paneli</h1>
+      <div className="flex flex-1 flex-col min-w-0">
+        <header className="flex h-14 items-center border-b border-border px-6">
+          <h1 className="text-sm font-medium text-muted-foreground tracking-wide">Yönetim Paneli</h1>
         </header>
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 overflow-auto">
           <Outlet />
         </main>
       </div>
