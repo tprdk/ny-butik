@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import type { ProductSummary } from '@/types/catalog.types'
 import { formatPrice } from '@/lib/format'
+import { useWishlist } from '@/hooks/useWishlist'
+import { cn } from '@/lib/utils'
 
 interface Props {
   product: ProductSummary
@@ -9,6 +11,8 @@ interface Props {
 
 export function ProductCard({ product }: Props) {
   const hasDiscount = product.minSalePrice != null && product.minPrice != null
+  const { isWishlisted, toggle, isPending } = useWishlist()
+  const wishlisted = isWishlisted(product.id)
 
   return (
     <Link
@@ -44,11 +48,20 @@ export function ProductCard({ product }: Props) {
         )}
 
         <button
-          onClick={(e) => { e.preventDefault() }}
-          className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity hover:text-rose-500"
-          aria-label="Favorilere ekle"
+          onClick={(e) => { e.preventDefault(); toggle(product.id) }}
+          disabled={isPending}
+          className={cn(
+            'absolute top-2 right-2 p-1.5 bg-white rounded-full shadow transition-opacity disabled:opacity-60',
+            wishlisted ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          )}
+          aria-label={wishlisted ? 'Favorilerden çıkar' : 'Favorilere ekle'}
         >
-          <Heart className="w-4 h-4" />
+          <Heart
+            className={cn(
+              'w-4 h-4',
+              wishlisted ? 'fill-rose-500 text-rose-500' : 'text-gray-400 hover:text-rose-500'
+            )}
+          />
         </button>
       </div>
 

@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { cn } from '@/lib/utils'
 import type { ApiResponse } from '@/types/api.types'
 import type { User } from '@/types/user.types'
+import { changePasswordSchema, type ChangePasswordFormData } from '@/schemas/auth.schema'
 
 const profileSchema = z.object({
   firstName: z.string().min(2, 'Ad en az 2 karakter olmalıdır.').max(100),
@@ -21,6 +22,103 @@ const profileSchema = z.object({
 })
 
 type ProfileFormData = z.infer<typeof profileSchema>
+
+function ChangePasswordSection() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ChangePasswordFormData>({
+    resolver: zodResolver(changePasswordSchema),
+  })
+
+  const inputClass = (hasError: boolean) =>
+    cn(
+      'w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none transition-colors',
+      'focus:border-primary focus:ring-1 focus:ring-primary',
+      hasError ? 'border-destructive' : 'border-input'
+    )
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: ChangePasswordFormData) =>
+      apiClient.put('/users/me/password', {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      }),
+    onSuccess: () => {
+      toast.success('Şifreniz güncellendi.')
+      reset()
+    },
+    onError: () => toast.error('Şifre güncellenemedi. Mevcut şifrenizi kontrol edin.'),
+  })
+
+  return (
+    <div className="rounded-xl border border-border bg-white p-6">
+      <h2 className="mb-4 font-serif text-lg font-semibold">Şifre Değiştir</h2>
+      <form onSubmit={handleSubmit((d) => mutate(d))} noValidate className="space-y-4">
+        <div className="space-y-1.5">
+          <label htmlFor="currentPassword" className="text-sm font-medium">
+            Mevcut Şifre
+          </label>
+          <input
+            id="currentPassword"
+            type="password"
+            autoComplete="current-password"
+            className={inputClass(!!errors.currentPassword)}
+            {...register('currentPassword')}
+          />
+          {errors.currentPassword && (
+            <p className="text-xs text-destructive">{errors.currentPassword.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <label htmlFor="newPassword" className="text-sm font-medium">
+            Yeni Şifre
+          </label>
+          <input
+            id="newPassword"
+            type="password"
+            autoComplete="new-password"
+            className={inputClass(!!errors.newPassword)}
+            {...register('newPassword')}
+          />
+          {errors.newPassword && (
+            <p className="text-xs text-destructive">{errors.newPassword.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <label htmlFor="newPasswordConfirm" className="text-sm font-medium">
+            Yeni Şifre (Tekrar)
+          </label>
+          <input
+            id="newPasswordConfirm"
+            type="password"
+            autoComplete="new-password"
+            className={inputClass(!!errors.newPasswordConfirm)}
+            {...register('newPasswordConfirm')}
+          />
+          {errors.newPasswordConfirm && (
+            <p className="text-xs text-destructive">{errors.newPasswordConfirm.message}</p>
+          )}
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          >
+            {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+            Şifreyi Güncelle
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
 
 export default function ProfilePage() {
   const queryClient = useQueryClient()
@@ -126,6 +224,8 @@ export default function ProfilePage() {
             </div>
           </form>
         </div>
+
+        <ChangePasswordSection />
       </div>
     </>
   )
