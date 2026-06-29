@@ -50,13 +50,31 @@ export default function App() {
   return (
     <Suspense fallback={<LoadingSpinner fullScreen />}>
       <Routes>
-        {/* Public */}
+        {/* Public + Account + Checkout — hepsi Header/Footer ile */}
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
           <Route path="urunler" element={<ProductListPage />} />
           <Route path="urunler/:slug" element={<ProductDetailPage />} />
           <Route path="kategori/:slug" element={<ProductListPage />} />
           <Route path="sepet" element={<CartPage />} />
+
+          {/* Checkout */}
+          <Route element={<ProtectedRoute requiredRole="CUSTOMER" />}>
+            <Route path="odeme" element={<CheckoutPage />} />
+            <Route path="siparis-basarili/:orderNumber" element={<OrderSuccessPage />} />
+          </Route>
+
+          {/* Account */}
+          <Route element={<ProtectedRoute requiredRole="CUSTOMER" />}>
+            <Route path="hesabim" element={<AccountLayout />}>
+              <Route index element={<ProfilePage />} />
+              <Route path="siparisler" element={<OrdersPage />} />
+              <Route path="siparisler/:orderNumber" element={<OrderDetailPage />} />
+              <Route path="favoriler" element={<WishlistPage />} />
+              <Route path="adresler" element={<AddressesPage />} />
+              <Route path="iadeler" element={<ReturnsPage />} />
+            </Route>
+          </Route>
         </Route>
 
         {/* Auth */}
@@ -64,24 +82,6 @@ export default function App() {
         <Route path="kayit" element={<RegisterPage />} />
         <Route path="sifremi-unuttum" element={<ForgotPasswordPage />} />
         <Route path="sifre-sifirla" element={<ResetPasswordPage />} />
-
-        {/* Checkout — Customer only */}
-        <Route element={<ProtectedRoute requiredRole="CUSTOMER" />}>
-          <Route path="odeme" element={<CheckoutPage />} />
-          <Route path="siparis-basarili/:orderNumber" element={<OrderSuccessPage />} />
-        </Route>
-
-        {/* Account — Customer only */}
-        <Route element={<ProtectedRoute requiredRole="CUSTOMER" />}>
-          <Route path="hesabim" element={<AccountLayout />}>
-            <Route index element={<ProfilePage />} />
-            <Route path="siparisler" element={<OrdersPage />} />
-            <Route path="siparisler/:orderNumber" element={<OrderDetailPage />} />
-            <Route path="favoriler" element={<WishlistPage />} />
-            <Route path="adresler" element={<AddressesPage />} />
-            <Route path="iadeler" element={<ReturnsPage />} />
-          </Route>
-        </Route>
 
         {/* Admin — Admin only */}
         <Route element={<ProtectedRoute requiredRole="ADMIN" />}>

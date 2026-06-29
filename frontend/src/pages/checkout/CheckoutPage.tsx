@@ -93,7 +93,7 @@ export default function CheckoutPage() {
     <>
       <Helmet><title>Ödeme — NY Butik</title></Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="bg-background">
         <div className="container-site py-10">
           {/* Adım göstergesi */}
           <div className="mb-10">

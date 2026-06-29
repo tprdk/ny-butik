@@ -123,6 +123,8 @@ export function CartDrawer() {
               onCheckout={handleCheckout}
               isCouponLoading={applyCoupon.isPending}
               couponError={couponError}
+              showViewCart
+              onViewCart={close}
             />
           </div>
         )}

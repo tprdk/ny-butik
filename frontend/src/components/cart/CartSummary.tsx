@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Tag, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { formatPrice } from '@/lib/format'
 import type { Cart } from '@/types/cart.types'
 
@@ -10,9 +11,11 @@ interface Props {
   onCheckout?: () => void
   isCouponLoading?: boolean
   couponError?: string | null
+  showViewCart?: boolean
+  onViewCart?: () => void
 }
 
-export function CartSummary({ cart, onApplyCoupon, onRemoveCoupon, onCheckout, isCouponLoading, couponError }: Props) {
+export function CartSummary({ cart, onApplyCoupon, onRemoveCoupon, onCheckout, isCouponLoading, couponError, showViewCart, onViewCart }: Props) {
   const [couponCode, setCouponCode] = useState('')
 
   const handleApply = (e: React.FormEvent) => {
@@ -79,13 +82,24 @@ export function CartSummary({ cart, onApplyCoupon, onRemoveCoupon, onCheckout, i
       </div>
 
       {onCheckout && (
-        <button
-          onClick={onCheckout}
-          disabled={cart.items.length === 0}
-          className="btn-primary w-full justify-center py-3.5"
-        >
-          Ödemeye Geç
-        </button>
+        <div className="space-y-2">
+          <button
+            onClick={onCheckout}
+            disabled={cart.items.length === 0}
+            className="btn-primary w-full justify-center py-3.5"
+          >
+            Ödemeye Geç
+          </button>
+          {showViewCart && (
+            <Link
+              to="/sepet"
+              onClick={onViewCart}
+              className="btn-outline w-full justify-center py-3"
+            >
+              Sepeti Görüntüle
+            </Link>
+          )}
+        </div>
       )}
     </div>
   )

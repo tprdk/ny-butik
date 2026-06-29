@@ -25,42 +25,57 @@ export default function HomePage() {
       </Helmet>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-brand-dark">
-        {/* Subtle texture overlay */}
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #2C1A0E 0%, #4A2A15 25%, #6B3E1E 45%, #8B5A2B 60%, #4A2A15 80%, #1C1612 100%)' }}>
+        {/* Warm earth radial glow */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 60% 70% at 75% 50%, rgba(183,120,60,0.18) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 20% 80%, rgba(139,90,43,0.14) 0%, transparent 60%)'
+        }} />
+        {/* Subtle noise grain */}
+        <div className="absolute inset-0 opacity-[0.06]"
+          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '180px 180px' }} />
+        {/* Fine crosshatch */}
+        <div className="absolute inset-0 opacity-[0.03]"
+          style={{ backgroundImage: 'linear-gradient(0deg, rgba(255,220,160,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,220,160,0.8) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
         <div className="container-site relative py-28 sm:py-36 lg:py-44">
-          <div className="max-w-2xl">
-            <p className="text-[11px] tracking-[0.2em] uppercase text-white/40 mb-6 font-light">
-              Yeni Sezon Koleksiyonu
-            </p>
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-white leading-[1.1] text-balance mb-6">
-              Zarafet Sadece Bir Tercih Değil
+          {/* Decorative serif initial */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[22rem] font-serif font-light leading-none select-none pointer-events-none opacity-[0.04] text-amber-200 pr-8 hidden lg:block">
+            N
+          </div>
+
+          <div className="max-w-2xl relative">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-8 bg-amber-300/40" />
+              <p className="text-[11px] tracking-[0.22em] uppercase text-amber-200/50 font-light">
+                Yeni Sezon Koleksiyonu
+              </p>
+            </div>
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-amber-50 leading-[1.1] text-balance mb-6">
+              Zarafet Sadece<br className="hidden sm:block" /> Bir Tercih Değil
             </h1>
-            <p className="text-white/50 text-base font-light leading-relaxed mb-10 max-w-md">
+            <p className="text-amber-100/40 text-base font-light leading-relaxed mb-10 max-w-md">
               Özenle seçilmiş kumaşlar, modern kesimler ve tesettür estetiğinin en şık hali.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
                 to="/urunler"
-                className="inline-flex items-center gap-2.5 bg-white text-brand-dark text-sm font-medium px-7 py-3.5 hover:bg-brand-sand transition-colors"
+                className="inline-flex items-center gap-2.5 bg-amber-50 text-brand-dark text-sm font-medium px-7 py-3.5 hover:bg-white transition-colors"
               >
                 Koleksiyonu Keşfet
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/kategori/kiyafet"
-                className="inline-flex items-center gap-2 text-white/60 text-sm font-light px-2 py-3.5 hover:text-white transition-colors border-b border-white/20 hover:border-white/50"
+                to="/urunler"
+                className="inline-flex items-center gap-2 text-amber-200/50 text-sm font-light px-2 py-3.5 hover:text-amber-100 transition-colors border-b border-amber-300/20 hover:border-amber-300/50"
               >
-                Kıyafetlere Bak
+                Tüm Ürünlere Bak
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background/20 to-transparent" />
+        {/* Bottom fade to cream */}
+        <div className="absolute bottom-0 left-0 right-0 h-20" style={{ background: 'linear-gradient(to top, hsl(36,25%,97%) 0%, transparent 100%)' }} />
       </section>
 
       {/* Kategoriler */}

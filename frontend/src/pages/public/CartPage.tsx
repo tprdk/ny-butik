@@ -29,63 +29,63 @@ export default function CartPage() {
     <>
       <Helmet><title>Sepetim — NY Butik</title></Helmet>
 
-      <div className="container py-8 md:py-12">
-        <div className="mb-6 flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-gray-500 hover:text-gray-900 transition-colors"
-            aria-label="Geri"
+      <div className="container-site py-10">
+        {/* Breadcrumb */}
+        <div className="mb-8 flex items-center gap-2">
+          <Link
+            to="/urunler"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft size={20} />
-          </button>
-          <h1 className="text-2xl font-semibold text-gray-900">Sepetim</h1>
+            <ArrowLeft size={12} strokeWidth={1.5} />
+            Alışverişe Devam Et
+          </Link>
         </div>
+
+        <h1 className="font-serif text-2xl font-light text-foreground mb-8">
+          Sepetim
+          {cart && cart.items.length > 0 && (
+            <span className="ml-3 text-sm font-sans font-light text-muted-foreground">
+              {cart.items.reduce((s, i) => s + i.quantity, 0)} ürün
+            </span>
+          )}
+        </h1>
 
         {isLoading ? (
           <div className="flex h-64 items-center justify-center">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-rose-600 border-t-transparent" />
+            <div className="h-6 w-6 animate-spin rounded-full border border-foreground/20 border-t-foreground/60" />
           </div>
         ) : isEmpty ? (
-          <div className="flex flex-col items-center justify-center gap-5 py-24 text-center">
-            <ShoppingBag size={64} className="text-gray-200" />
+          <div className="flex flex-col items-center justify-center gap-5 py-28 text-center border border-dashed border-border">
+            <ShoppingBag size={44} strokeWidth={1} className="text-border" />
             <div>
-              <p className="text-xl font-semibold text-gray-900">Sepetiniz boş</p>
-              <p className="mt-1 text-gray-500">Beğendiğiniz ürünleri sepetinize ekleyin</p>
+              <p className="text-sm font-light text-foreground mb-1">Sepetiniz boş</p>
+              <p className="text-xs text-muted-foreground">Beğendiğiniz ürünleri sepetinize ekleyin.</p>
             </div>
-            <Link
-              to="/urunler"
-              className="rounded-lg bg-rose-600 px-8 py-3 text-sm font-semibold text-white hover:bg-rose-700 transition-colors"
-            >
+            <Link to="/urunler" className="btn-primary btn-sm">
               Alışverişe Başla
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            {/* Ürünler */}
             <div className="lg:col-span-2">
-              <div className="rounded-xl border border-gray-200 bg-white">
-                <div className="divide-y divide-gray-100 px-6">
-                  {cart.items.map((item) => (
+              <div className="border border-border divide-y divide-border">
+                {cart.items.map((item) => (
+                  <div key={item.variantId} className="px-5">
                     <CartItemRow
-                      key={item.variantId}
                       item={item}
                       onUpdate={(vid, qty) => updateItem.mutate({ variantId: vid, quantity: qty })}
                       onRemove={(vid) => removeItem.mutate(vid)}
                       isUpdating={updateItem.isPending || removeItem.isPending}
                     />
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-              <Link
-                to="/urunler"
-                className="mt-4 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeft size={16} />
-                Alışverişe Devam Et
-              </Link>
             </div>
 
-            <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="mb-4 text-base font-semibold text-gray-900">Sipariş Özeti</h2>
+            {/* Özet */}
+            <div className="border border-border p-6 self-start">
+              <h2 className="text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-5">Sipariş Özeti</h2>
               <CartSummary
                 cart={cart}
                 onApplyCoupon={handleApplyCoupon}

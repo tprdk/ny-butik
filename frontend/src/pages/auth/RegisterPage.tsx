@@ -34,12 +34,20 @@ export default function RegisterPage() {
 
       <div className="flex min-h-screen bg-background">
         {/* Sol panel */}
-        <div className="hidden lg:flex lg:w-1/2 bg-brand-dark items-end p-14">
-          <div>
-            <Link to="/" className="font-serif text-3xl font-light text-white tracking-wider">
+        <div className="hidden lg:flex lg:w-1/2 items-end p-14 relative overflow-hidden" style={{ background: 'linear-gradient(145deg, #2C1A0E 0%, #4A2A15 30%, #6B3E1E 55%, #8B5A2B 70%, #3D2010 100%)' }}>
+          {/* Earth glow layers */}
+          <div className="absolute inset-0 pointer-events-none" style={{
+            background: 'radial-gradient(ellipse 70% 60% at 80% 20%, rgba(183,120,60,0.2) 0%, transparent 65%), radial-gradient(ellipse 50% 50% at 15% 85%, rgba(139,80,30,0.15) 0%, transparent 60%)'
+          }} />
+          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px' }} />
+          <div className="absolute right-8 top-1/2 -translate-y-1/2 font-serif text-[18rem] font-light leading-none opacity-[0.04] text-amber-200 select-none pointer-events-none">B</div>
+
+          <div className="relative">
+            <Link to="/" className="font-serif text-3xl font-light text-amber-50 tracking-wider">
               NY Butik
             </Link>
-            <p className="mt-3 text-sm font-light text-white/40 leading-relaxed max-w-xs">
+            <div className="mt-4 h-px w-12 bg-amber-300/30" />
+            <p className="mt-4 text-sm font-light text-amber-100/35 leading-relaxed max-w-xs">
               Ücretsiz hesap açarak kampanyalardan ve indirimlerden haberdar olun.
             </p>
           </div>
