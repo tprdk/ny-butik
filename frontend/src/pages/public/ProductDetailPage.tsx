@@ -7,6 +7,8 @@ import { ImageGallery } from '@/components/catalog/ImageGallery'
 import { ColorSwatch } from '@/components/catalog/ColorSwatch'
 import { SizeSelector } from '@/components/catalog/SizeSelector'
 import { formatPrice } from '@/lib/format'
+import { useCart } from '@/hooks/useCart'
+import { useCartStore } from '@/store/cart.store'
 import type { Color, Size } from '@/types/catalog.types'
 
 export default function ProductDetailPage() {
@@ -14,6 +16,8 @@ export default function ProductDetailPage() {
   const { data: product, isLoading, isError } = useProduct(slug ?? '')
   const [selectedColorId, setSelectedColorId] = useState<number | undefined>()
   const [selectedSizeId, setSelectedSizeId] = useState<number | undefined>()
+  const { addItem } = useCart()
+  const openCart = useCartStore((s) => s.open)
 
   const colors = useMemo(() => {
     if (!product) return []
@@ -124,10 +128,17 @@ export default function ProductDetailPage() {
           )}
 
           <div className="flex gap-3 mt-2">
-            <button disabled={!selectedVariant || !selectedVariant.inStock}
+            <button
+              disabled={!selectedVariant || !selectedVariant.inStock || addItem.isPending}
+              onClick={() => {
+                if (!selectedVariant) return
+                addItem.mutate({ variantId: selectedVariant.id, quantity: 1 }, {
+                  onSuccess: openCart,
+                })
+              }}
               className="flex-1 flex items-center justify-center gap-2 bg-neutral-900 text-white py-3.5 px-6 rounded-xl font-medium hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
               <ShoppingBag className="w-5 h-5" />
-              {!selectedSizeId ? 'Beden Seçin' : !selectedVariant?.inStock ? 'Tükendi' : 'Sepete Ekle'}
+              {addItem.isPending ? 'Ekleniyor...' : !selectedSizeId ? 'Beden Seçin' : !selectedVariant?.inStock ? 'Tükendi' : 'Sepete Ekle'}
             </button>
             <button className="p-3.5 border border-neutral-200 rounded-xl hover:bg-neutral-50"><Heart className="w-5 h-5" /></button>
             <button className="p-3.5 border border-neutral-200 rounded-xl hover:bg-neutral-50"><Share2 className="w-5 h-5" /></button>

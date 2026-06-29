@@ -1,8 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'sonner'
 import { authApi } from '@/api/auth.api'
+import { cartApi } from '@/api/cart.api'
 import { useAuthStore } from '@/store/auth.store'
+import { useCartStore } from '@/store/cart.store'
 import type { LoginFormData, RegisterFormData } from '@/schemas/auth.schema'
 
 export function useLogin() {
@@ -10,11 +12,20 @@ export function useLogin() {
   const navigate = useNavigate()
   const location = useLocation()
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/'
+  const sessionId = useCartStore((s) => s.sessionId)
+  const qc = useQueryClient()
 
   return useMutation({
     mutationFn: (data: LoginFormData) => authApi.login(data),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       setAuth(res.user, res.accessToken)
+      // Misafir sepetini hesaba merge et
+      try {
+        const merged = await cartApi.merge(sessionId)
+        qc.setQueryData(['cart'], merged)
+      } catch {
+        // merge başarısız olsa bile giriş devam eder
+      }
       toast.success('Hoş geldiniz, ' + res.user.firstName + '!')
       navigate(from, { replace: true })
     },

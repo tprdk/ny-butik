@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 import { ShoppingBag, Heart, User, Search, Menu } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
+import { useCartStore } from '@/store/cart.store'
+import { useCart } from '@/hooks/useCart'
 
 export default function Header() {
   const { isAuthenticated } = useAuthStore()
+  const { open } = useCartStore()
+  const { itemCount } = useCart()
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
@@ -42,9 +46,18 @@ export default function Header() {
             <User className="h-5 w-5" />
           </Link>
 
-          <Link to="/sepet" aria-label="Sepet" className="relative text-muted-foreground transition-colors hover:text-primary">
+          <button
+            onClick={open}
+            aria-label="Sepet"
+            className="relative text-muted-foreground transition-colors hover:text-primary"
+          >
             <ShoppingBag className="h-5 w-5" />
-          </Link>
+            {itemCount > 0 && (
+              <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[10px] font-bold text-white">
+                {itemCount > 99 ? '99+' : itemCount}
+              </span>
+            )}
+          </button>
 
           <button aria-label="Menü" className="text-muted-foreground transition-colors hover:text-primary md:hidden">
             <Menu className="h-5 w-5" />

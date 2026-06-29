@@ -2,6 +2,7 @@ import { apiClient } from './client'
 import type { AxiosResponse } from 'axios'
 import type { ApiResponse, PageResponse } from '@/types/api.types'
 import type { Product, ProductSummary } from '@/types/catalog.types'
+import type { Coupon, CreateCouponPayload } from '@/types/coupon.types'
 
 const unwrap = <T>(res: AxiosResponse<ApiResponse<T>>): T => res.data.data
 
@@ -83,4 +84,18 @@ export const adminApi = {
 
   setPrimaryImage: (productId: number, imageId: number): Promise<void> =>
     apiClient.patch(`/admin/products/${productId}/images/${imageId}/primary`).then(() => undefined),
+
+  // ─── Coupons ────────────────────────────────────────────────────────────
+
+  getCoupons: (page = 0, size = 20): Promise<PageResponse<Coupon>> =>
+    apiClient.get<ApiResponse<PageResponse<Coupon>>>(`/admin/coupons?page=${page}&size=${size}`).then(unwrap),
+
+  createCoupon: (payload: CreateCouponPayload): Promise<Coupon> =>
+    apiClient.post<ApiResponse<Coupon>>('/admin/coupons', payload).then(unwrap),
+
+  updateCoupon: (id: number, payload: CreateCouponPayload): Promise<Coupon> =>
+    apiClient.put<ApiResponse<Coupon>>(`/admin/coupons/${id}`, payload).then(unwrap),
+
+  toggleCoupon: (id: number): Promise<Coupon> =>
+    apiClient.patch<ApiResponse<Coupon>>(`/admin/coupons/${id}/toggle`).then(unwrap),
 }
