@@ -2,21 +2,25 @@ export type OrderStatus =
   | 'PENDING_PAYMENT'
   | 'PAYMENT_PROCESSING'
   | 'PAYMENT_FAILED'
-  | 'PAID'
+  | 'CONFIRMED'
   | 'PREPARING'
   | 'SHIPPED'
   | 'DELIVERED'
   | 'CANCELLED'
+  | 'RETURN_REQUESTED'
+  | 'RETURNED'
 
-export type ReturnStatus =
-  | 'REQUESTED'
-  | 'APPROVED'
-  | 'REJECTED'
-  | 'RETURN_RECEIVED'
-  | 'REFUNDED'
+export type ShipmentStatus =
+  | 'CREATED'
+  | 'PICKING'
+  | 'PACKED'
+  | 'SHIPPED'
+  | 'IN_TRANSIT'
+  | 'OUT_FOR_DELIVERY'
+  | 'DELIVERED'
+  | 'RETURNED'
 
 export interface OrderItem {
-  id: number
   variantId: number
   productName: string
   sku: string
@@ -29,28 +33,51 @@ export interface OrderItem {
   lineTotal: number
 }
 
-export interface Shipment {
+export interface ShipmentInfo {
+  id: number
+  provider: string
   trackingNumber: string | null
   trackingUrl: string | null
-  status: string
+  status: ShipmentStatus
   estimatedDelivery: string | null
   deliveredAt: string | null
+}
+
+export interface StatusHistory {
+  id: number
+  status: OrderStatus
+  note: string | null
+  changedBy: string | null
+  createdAt: string
 }
 
 export interface Order {
   id: number
   orderNumber: string
   status: OrderStatus
-  items: OrderItem[]
   subtotal: number
   discountAmount: number
   shippingAmount: number
   taxAmount: number
   totalAmount: number
-  shipment: Shipment | null
   notes: string | null
+  couponCode: string | null
+  items: OrderItem[]
+  statusHistory: StatusHistory[]
+  shipment: ShipmentInfo | null
+  shippingName: string
+  shippingPhone: string
+  shippingAddress1: string
+  shippingAddress2: string | null
+  shippingCity: string
+  shippingDistrict: string
+  shippingPostal: string
+  shippingCountry: string
+  billingName: string
+  billingAddress1: string
+  billingCity: string
+  billingDistrict: string
   createdAt: string
-  updatedAt: string
 }
 
 export interface OrderSummary {
@@ -59,6 +86,35 @@ export interface OrderSummary {
   status: OrderStatus
   totalAmount: number
   itemCount: number
-  primaryImage: string | null
+  shipmentStatus: ShipmentStatus | null
   createdAt: string
+}
+
+export interface CheckoutResponse {
+  orderId: number
+  orderNumber: string
+  status: string
+  total: number
+}
+
+export interface CreateOrderRequest {
+  shippingAddressId: number
+  billingAddressId: number
+  paymentMethod: string
+  notes?: string
+}
+
+export interface Address {
+  id: number
+  label: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  addressLine1: string
+  addressLine2: string | null
+  city: string
+  district: string
+  postalCode: string
+  country: string
+  isDefault: boolean
 }
