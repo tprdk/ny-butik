@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /swagger-ui/
+Disallow: /v3/api-docs/
+Disallow: /actuator/
+
+Sitemap: ${FRONTEND_URL:https://www.nybutik.com}/sitemap.xml

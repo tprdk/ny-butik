@@ -78,7 +78,18 @@ export default function ProductDetailPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Helmet><title>{product.name} — NY Butik</title></Helmet>
+      <Helmet>
+        <title>{product.name} — NY Butik</title>
+        <meta name="description" content={product.shortDesc ?? `${product.name} — NY Butik'te en iyi fiyatlarla tesettür giyim.`} />
+        <meta property="og:title" content={`${product.name} — NY Butik`} />
+        <meta property="og:description" content={product.shortDesc ?? `${product.name} — NY Butik'te en iyi fiyatlarla.`} />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={`https://www.nybutik.com/urunler/${product.slug}`} />
+        {product.images[0] && <meta property="og:image" content={product.images[0].url} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={product.name} />
+        {product.images[0] && <meta name="twitter:image" content={product.images[0].url} />}
+      </Helmet>
       <nav className="flex items-center gap-1 text-xs text-neutral-500 mb-6">
         <Link to="/" className="hover:text-neutral-700">Ana Sayfa</Link>
         <ChevronRight className="w-3 h-3" />

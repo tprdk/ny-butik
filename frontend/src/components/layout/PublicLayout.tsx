@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import { CartDrawer } from '@/components/cart/CartDrawer'
+import CookieConsent from '@/components/common/CookieConsent'
 
 export default function PublicLayout() {
   return (
@@ -12,6 +13,7 @@ export default function PublicLayout() {
       </main>
       <Footer />
       <CartDrawer />
+      <CookieConsent />
     </div>
   )
 }

@@ -30,6 +30,8 @@ app:
     email:
       from: test@nybutik.com
       from-name: NY Butik Test
+  rate-limit:
+    enabled: false
   shipping:
     base-fee: 49.90
     free-shipping-threshold: 500.00

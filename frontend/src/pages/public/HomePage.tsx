@@ -16,7 +16,17 @@ export default function HomePage() {
 
   return (
     <div>
-      <Helmet><title>NY Butik — Tesettür Giyim</title></Helmet>
+      <Helmet>
+        <title>NY Butik — Tesettür Giyim</title>
+        <meta name="description" content="NY Butik — modern tesettür giyimde kalite ve şıklık. Başörtüsü, tunik, abaya ve daha fazlası." />
+        <meta property="og:title" content="NY Butik — Tesettür Giyim" />
+        <meta property="og:description" content="Modern tesettür giyimde kalite ve şıklık. Başörtüsü, tunik, abaya ve daha fazlası." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.nybutik.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="NY Butik — Tesettür Giyim" />
+        <meta name="twitter:description" content="Modern tesettür giyimde kalite ve şıklık." />
+      </Helmet>
       {/* Hero */}
       <section className="relative bg-neutral-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-950" />
