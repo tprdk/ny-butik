@@ -17,71 +17,79 @@ export function ProductCard({ product }: Props) {
   return (
     <Link
       to={`/urunler/${product.slug}`}
-      className="group flex flex-col bg-white rounded-xl overflow-hidden border border-neutral-100 hover:shadow-lg transition-shadow duration-200"
+      className="group relative flex flex-col bg-white overflow-hidden transition-shadow duration-300 hover:shadow-card-hover"
     >
-      <div className="relative aspect-[3/4] bg-neutral-50 overflow-hidden">
+      {/* Image */}
+      <div className="relative aspect-[3/4] bg-brand-sand overflow-hidden">
         {product.primaryImageUrl ? (
           <img
             src={product.primaryImageUrl}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-neutral-300">
-            <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <div className="w-full h-full flex items-center justify-center">
+            <svg className="w-12 h-12 text-border" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
         )}
 
+        {/* Discount badge */}
         {hasDiscount && (
-          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+          <span className="absolute top-3 left-3 bg-brand-earth text-white text-[10px] font-medium tracking-wider uppercase px-2.5 py-1">
             İndirim
           </span>
         )}
 
+        {/* Out of stock overlay */}
         {!product.inStock && (
-          <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-            <span className="text-sm font-medium text-neutral-500">Tükendi</span>
+          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+            <span className="text-xs tracking-widest uppercase text-foreground/50 font-medium">Tükendi</span>
           </div>
         )}
 
+        {/* Wishlist button */}
         <button
-          onClick={(e) => { e.preventDefault(); toggle(product.id) }}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(product.id) }}
           disabled={isPending}
           className={cn(
-            'absolute top-2 right-2 p-1.5 bg-white rounded-full shadow transition-opacity disabled:opacity-60',
+            'absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm shadow-subtle transition-all duration-200 disabled:opacity-60',
             wishlisted ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           )}
           aria-label={wishlisted ? 'Favorilerden çıkar' : 'Favorilere ekle'}
         >
           <Heart
             className={cn(
-              'w-4 h-4',
-              wishlisted ? 'fill-rose-500 text-rose-500' : 'text-gray-400 hover:text-rose-500'
+              'w-3.5 h-3.5 transition-colors',
+              wishlisted ? 'fill-brand-earth text-brand-earth' : 'text-foreground/50'
             )}
           />
         </button>
       </div>
 
-      <div className="p-3 flex flex-col gap-1">
-        <p className="text-xs text-neutral-400">{product.category.name}</p>
-        <h3 className="text-sm font-medium text-neutral-900 line-clamp-2 leading-snug">
+      {/* Info */}
+      <div className="pt-3 pb-4 px-0.5">
+        <p className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-1">
+          {product.category.name}
+        </p>
+        <h3 className="text-sm font-light text-foreground leading-snug line-clamp-2 mb-2">
           {product.name}
         </h3>
-        <div className="flex items-center gap-2 mt-1">
+        <div className="flex items-baseline gap-2">
           {hasDiscount ? (
             <>
-              <span className="text-sm font-bold text-rose-600">
+              <span className="text-sm font-medium text-brand-earth">
                 {formatPrice(product.minSalePrice!)}
               </span>
-              <span className="text-xs text-neutral-400 line-through">
+              <span className="text-xs text-muted-foreground line-through">
                 {formatPrice(product.minPrice!)}
               </span>
             </>
           ) : (
-            <span className="text-sm font-bold text-neutral-900">
+            <span className="text-sm font-medium text-foreground">
               {product.minPrice != null ? formatPrice(product.minPrice) : '—'}
             </span>
           )}

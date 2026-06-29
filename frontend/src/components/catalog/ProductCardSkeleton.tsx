@@ -1,12 +1,12 @@
 export function ProductCardSkeleton() {
   return (
-    <div className="flex flex-col bg-white rounded-xl overflow-hidden border border-neutral-100 animate-pulse">
-      <div className="aspect-[3/4] bg-neutral-200" />
-      <div className="p-3 flex flex-col gap-2">
-        <div className="h-3 w-16 bg-neutral-200 rounded" />
-        <div className="h-4 w-full bg-neutral-200 rounded" />
-        <div className="h-4 w-3/4 bg-neutral-200 rounded" />
-        <div className="h-4 w-20 bg-neutral-200 rounded mt-1" />
+    <div className="flex flex-col bg-white animate-pulse">
+      <div className="aspect-[3/4] bg-brand-sand" />
+      <div className="pt-3 pb-4 px-0.5 flex flex-col gap-2">
+        <div className="h-2.5 w-14 bg-border rounded-sm" />
+        <div className="h-3.5 w-full bg-border rounded-sm" />
+        <div className="h-3.5 w-2/3 bg-border rounded-sm" />
+        <div className="h-3.5 w-20 bg-border rounded-sm mt-1" />
       </div>
     </div>
   )

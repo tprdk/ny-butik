@@ -2,28 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
 @layer base {
   :root {
-    --background: 40 33% 97%;       /* Krem beyaz */
-    --foreground: 0 0% 10%;         /* Derin siyah */
+    /* Warm cream/earth palette */
+    --background: 36 25% 97%;       /* #FAF8F4 sıcak krem */
+    --foreground: 20 15% 10%;       /* #1C1612 sıcak siyah */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 20 15% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 0 0% 10%;            /* #1A1A1A */
-    --primary-foreground: 40 33% 97%;
-    --secondary: 34 29% 56%;        /* #B8976A altın bej */
-    --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 42%;
-    --accent: 40 33% 92%;           /* Açık krem */
-    --accent-foreground: 0 0% 10%;
-    --destructive: 0 72% 51%;
+    --popover-foreground: 20 15% 10%;
+    --primary: 20 15% 10%;          /* sıcak siyah */
+    --primary-foreground: 36 25% 97%;
+    --secondary: 28 22% 45%;        /* #8B6E52 toprak */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 36 15% 94%;            /* sıcak açık gri */
+    --muted-foreground: 20 8% 45%;  /* orta sıcak gri */
+    --accent: 36 30% 91%;           /* açık bej */
+    --accent-foreground: 20 15% 10%;
+    --destructive: 0 65% 48%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 10%;
-    --radius: 0.5rem;
+    --border: 30 15% 88%;           /* #E3DDD5 sıcak border */
+    --input: 30 15% 88%;
+    --ring: 20 15% 10%;
+    --radius: 0.25rem;
+
+    /* Brand tokens */
+    --color-sand: 36 35% 90%;
+    --color-earth: 28 28% 48%;
+    --color-gold: 34 35% 58%;
   }
 }
 
@@ -31,16 +39,89 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  h1, h2, h3 {
-    @apply font-serif;
+
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--foreground));
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground)); }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary {
+    @apply btn bg-foreground text-background px-6 py-3 text-sm hover:bg-stone-700 active:scale-[0.98];
+  }
+  .btn-outline {
+    @apply btn border border-border bg-transparent px-6 py-3 text-sm text-foreground hover:bg-accent active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent;
+  }
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/30 transition-shadow;
+  }
+  .input-label {
+    @apply block text-xs font-medium text-muted-foreground mb-1.5 tracking-wide uppercase;
+  }
+
+  /* Section heading */
+  .section-heading {
+    @apply font-serif text-2xl font-normal text-foreground;
+  }
+
+  /* Divider */
+  .divider {
+    @apply h-px bg-border;
+  }
+
+  /* Card */
+  .card-surface {
+    @apply bg-white border border-border/60;
   }
 }
 
 @layer utilities {
-  .container-narrow {
-    @apply max-w-5xl mx-auto px-4;
+  .container-site {
+    @apply max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .tracking-loose {
+    letter-spacing: 0.08em;
   }
 }

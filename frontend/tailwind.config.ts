@@ -41,21 +41,33 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        // NY Butik marka renkleri
         brand: {
-          dark: '#1A1A1A',
+          dark: '#1C1612',
+          earth: '#8B6E52',
           gold: '#B8976A',
-          cream: '#F5F0E8',
+          cream: '#FAF8F4',
+          sand: '#F0EAE0',
         },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        DEFAULT: '0.25rem',
+        lg: '0.5rem',
+        xl: '0.75rem',
+        '2xl': '1rem',
+        full: '9999px',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'serif'],
+        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+      },
+      fontSize: {
+        '2xs': ['0.625rem', { lineHeight: '1rem' }],
+      },
+      boxShadow: {
+        'card': '0 1px 3px rgba(28, 22, 18, 0.06), 0 1px 2px rgba(28, 22, 18, 0.04)',
+        'card-hover': '0 4px 16px rgba(28, 22, 18, 0.10), 0 2px 6px rgba(28, 22, 18, 0.06)',
+        'subtle': '0 1px 2px rgba(28, 22, 18, 0.05)',
+        'modal': '0 20px 60px rgba(28, 22, 18, 0.15)',
       },
       keyframes: {
         'accordion-down': {
@@ -66,10 +78,15 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'fade-in': {
+          from: { opacity: '0', transform: 'translateY(8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fade-in 0.3s ease-out',
       },
     },
   },
