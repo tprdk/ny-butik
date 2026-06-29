@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Siparişiniz Alındı</title></head>
+<body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;color:#333">
+  <div style="background:#1a1a1a;padding:20px;text-align:center;margin-bottom:24px">
+    <h1 style="color:#fff;margin:0;font-size:24px">NY Butik</h1>
+  </div>
+  <h2 style="color:#1a1a1a">Siparişiniz Alındı!</h2>
+  <p>Merhaba <span th:text="${customerName}">Müşteri</span>,</p>
+  <p>Siparişiniz başarıyla oluşturuldu.</p>
+  <div style="background:#f9f9f9;border:1px solid #eee;padding:16px;border-radius:8px;margin:20px 0">
+    <p style="margin:4px 0"><strong>Sipariş No:</strong> <span th:text="${orderNumber}">#NY-...</span></p>
+    <p style="margin:4px 0"><strong>Toplam:</strong> <span th:text="${totalAmount}">0,00 ₺</span></p>
+    <p style="margin:4px 0"><strong>Teslimat:</strong> <span th:text="${shippingCity}">İstanbul</span></p>
+  </div>
+  <p>Siparişinizi hesabınızdan takip edebilirsiniz.</p>
+  <p style="color:#999;font-size:12px;margin-top:40px">NY Butik | Bu e-posta otomatik gönderilmiştir.</p>
+</body>
+</html>
