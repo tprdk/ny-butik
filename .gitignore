@@ -9,6 +9,11 @@ frontend/dist/
 frontend/.env.local
 frontend/.env.production
 
+# Playwright
+frontend/e2e/.auth/
+frontend/playwright-report/
+frontend/test-results/
+
 # IDE
 .idea/
 .vscode/

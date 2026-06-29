@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
+import { useAuthInit } from '@/hooks/useAuthInit'
 
 // Public layout
 const PublicLayout = lazy(() => import('@/components/layout/PublicLayout'))
@@ -47,6 +48,9 @@ const CustomerDetailPage = lazy(() => import('@/pages/admin/customers/CustomerDe
 const ReportsPage = lazy(() => import('@/pages/admin/reports/ReportsPage'))
 
 export default function App() {
+  const initialized = useAuthInit()
+  if (!initialized) return <LoadingSpinner fullScreen />
+
   return (
     <Suspense fallback={<LoadingSpinner fullScreen />}>
       <Routes>
